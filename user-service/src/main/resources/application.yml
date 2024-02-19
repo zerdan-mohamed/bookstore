@@ -2,21 +2,21 @@ spring:
   application:
     name: 'user-service'
   datasource:
-    url: 'jdbc:mysql://localhost:3308/bookstore?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false'
-    username: 'root'
-    password: '0000'
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: 'jdbc:postgresql://localhost:5432/bookstore?useSSL=false&serverTimezone=UTC'
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
   jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: create
     show-sql: true
 
 server:
   port: 8081
 
-# Eureka Server URL
 eureka:
   client:
     service-url:
