@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  postgres-db:
+    image: postgres:latest
+    network_mode: bridge
+    environment:
+      POSTGRES_HOST: 'localhost'
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: bookstore
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  eureka-service:
+    build: ./eureka-service/
+    network_mode: bridge
+    ports:
+      - "8761:8761"
+
+  gateway-service:
+    build: ./gateway-service/
+    network_mode: bridge
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-service
+
+  user-service:
+    build: ./user-service/
+    network_mode: bridge
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka-service
+      - postgres-db
+
+  book-inventory-service:
+    build: ./book-inventory-service/
+    network_mode: bridge
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka-service
+      - postgres-db
+
+  order-service:
+    build: ./order-service/
+    network_mode: bridge
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka-service
+      - book-inventory-service
+      - postgres-db
+
+  payment-service:
+    build: ./payment-service/
+    network_mode: bridge
+    ports:
+      - "8084:8084"
+    depends_on:
+      - eureka-service
+      - postgres-db
+
+volumes:
+  postgres-data:
