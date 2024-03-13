@@ -21,3 +21,28 @@ eureka:
   client:
     service-url:
       defaultZone: 'http://localhost:8761/eureka'
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+      # base-path: '/manage'
+  endpoint:
+    health:
+      show-details: 'ALWAYS'
+      group:
+        health-group:
+          include: 'ping, diskSpace'
+  info:
+    env:
+      enabled: true
+    os:
+      enabled: true
+
+info:
+  application:
+    name: '@project.artifactId@'
+    description: '@project.description@'
+    project-version: '@project.version@'
+    java-version: ${java.version}
